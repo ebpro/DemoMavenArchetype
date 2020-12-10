@@ -39,4 +39,5 @@ gh repo create \
 The gitflow workflow can be used to manage branch and maven artifact version.
 ```console
 mvn -DallowSnapshots=true -DfeatureName=myfeature1 jgitflow:feature-start
+mvn jgitflow:feature-finish
 ```

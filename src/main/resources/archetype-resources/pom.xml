@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.univtln.bruno.demos.poms</groupId>
+        <artifactId>demoparentpom</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+
+    <properties>
+        <app.main.class>${package}.App</app.main.class>
+        <github.account>emmanuelbruno</github.account>
+
+        <!-- Add a github server entry in ~/.m2/settings.xml -->
+
+        <!-- maven.compiler.release>8</maven.compiler.release -->
+    </properties>
+
+    <name>MyApp</name>
+    <description>A Java Application with a powerfull parent POM</description>
+    <inceptionYear>${maven.build.timestamp}</inceptionYear>
+    <!--licenses>
+      <license>
+        <name>mit</name>
+      </license>
+    </licenses>
+    <organization>
+      <name>Université de Toulon</name>
+      <url>http://www.univ-tln.fr</url>
+    </organization>
+    <developers>
+      <developer>
+        <id>emmanuelbruno</id>
+        <name>Emmanuel Bruno</name>
+        <email>emmanuel.bruno@univ-tln.fr</email>
+        <url>http://bruno.univ-tln.fr</url>
+        <organization>Université de Toulon</organization>
+        <organizationUrl>http://www.univ-tln.fr</organizationUrl>
+        <roles>
+          <role>architect</role>
+          <role>developer</role>
+        </roles>
+        <timezone>Europe/Paris</timezone>
+      </developer>
+    </developers-->
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

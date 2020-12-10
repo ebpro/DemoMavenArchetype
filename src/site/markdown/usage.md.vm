@@ -1,0 +1,32 @@
+# Usage
+
+```console
+mvn archetype:generate \
+ -DarchetypeGroupId=${project.groupId} \
+ -DarchetypeArtifactId=${project.artifactId} \
+ -DarchetypeVersion=${project.version} \
+ -DgroupId=fr.univtln.bruno.demos \
+ -DartifactId=MyApp \
+ -Dversion=1.0-SNAPSHOT
+```
+
+```console
+cd MyApp
+mvn package
+mvn exec:java
+java -jar target/MyApp-${project.version}-withdependencies.jar
+```
+
+```console
+curl --silent \
+    https://gist.githubusercontent.com/emmanuelbruno/906d26c8ef1ff14a9dea989f71445112/raw/afcbe268816c84a78aa69341e4c800c469f1c643/.gitignore \
+    -o .gitignore
+git init
+git add .
+git commit -m "Initial release."
+gh repo create \
+    --confirm \
+    --description "A simple CI Java Application" \
+    --private \
+    #[[${PWD\#\#*/}]]#
+```

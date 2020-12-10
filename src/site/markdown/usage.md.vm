@@ -1,4 +1,6 @@
 # Usage
+This archetype can create a simple Java Project ready for Continuous Integration (CI).
+Changes `-DgroupId` and `-DartifactId` to match the new application ones.
 
 ```console
 mvn archetype:generate \
@@ -10,6 +12,8 @@ mvn archetype:generate \
  -Dversion=1.0-SNAPSHOT
 ```
 
+The application can simply be package with and with dependencies.
+The default main class of the manifest is defined (see pom.xml).
 ```console
 cd MyApp
 mvn package
@@ -17,6 +21,7 @@ mvn exec:java
 java -jar target/MyApp-${project.version}-withdependencies.jar
 ```
 
+After enabling git versioning and creating a github repository with the official (https://github.com/cli/cli)[CLI]
 ```console
 curl --silent \
     https://gist.githubusercontent.com/emmanuelbruno/906d26c8ef1ff14a9dea989f71445112/raw/afcbe268816c84a78aa69341e4c800c469f1c643/.gitignore \
@@ -28,5 +33,10 @@ gh repo create \
     --confirm \
     --description "A simple CI Java Application" \
     --private \
-    #[[${PWD\#\#*/}]]#
+    #[[${PWD##*/}]]#
+```
+
+The gitflow workflow can be used to manage branch and maven artifact version.
+```console
+mvn -DallowSnapshots=true -DfeatureName=myfeature1 jgitflow:feature-start
 ```

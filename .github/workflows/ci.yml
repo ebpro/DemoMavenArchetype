@@ -60,9 +60,9 @@ jobs:
       # it contains env variables from github secrets for the credentials
       # to github, dockerhub and bintray
       - name: Build and test with Maven
-        run: mvn -B --settings ci-settings.xml clean verify
+        run: mvn -B --settings .github/ci-settings.xml clean verify
       - name: Deploy Maven Artifact
-        run: mvn -B --settings ci-settings.xml deploy
+        run: mvn -B --settings .github/ci-settings.xml deploy
 
   # This job publish the site for develop branch
   maven-site:
@@ -72,5 +72,5 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     steps:
       - name: Build and deploy site with Maven
-        run: mvn -B --settings ci-settings.xml site:site site:deploy
+        run: mvn -B --settings .github/ci-settings.xml site:site site:deploy
 

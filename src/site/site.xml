@@ -40,24 +40,20 @@
         <src>https://maven.apache.org/images/maven-logo-2.gif</src>
     </bannerRight-->
 
-    <publishDate position="right" />
-    <version position="right" />
+    <!--publishDate position="navigation-bottom" />
+    <version position="navigation-top" />
 
     <poweredBy>
         <logo name="Maven" href="https://maven.apache.org/"
             img="https://maven.apache.org/images/logos/maven-feather.png" />
     </poweredBy>
-
+-->
     <body>
-        <breadcrumbs>
-            <item name="Welcome" href="index.html" />
-        </breadcrumbs>
-
         <menu name="Overview">
-            <item name="Usage" href="usage.html" />
+            <item name="Readme" href="README.html" />
         </menu>
 
-        <menu ref="parent" inherit="top" />
+        <!--menu ref="parent" inherit="top" /-->
         <menu ref="reports" inherit="top" />
         <menu ref="modules" inherit="top" />
     </body>

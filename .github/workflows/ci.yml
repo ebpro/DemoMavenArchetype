@@ -1,0 +1,76 @@
+## A simple example to use  Github Actions for Java CI
+## This produces a simple jar artefact are store in the github maven repository
+# We build the project using maven.
+# The credential ae set in a specific settings.xml using env variables
+# The ENV variables are stored as Github Secrets
+#
+# The secrets are set in CLI with https://www.npmjs.com/package/gh-create-update-secret
+#
+#  ghrepo=`git remote -v|grep fetch|sed 's/.*:\(.*\).git/\1/'`
+#  export GH_PAT=$GITHUB_PASSWORD
+#  gh-create-update-secret --secret GITHUBLOGIN 		--value $GITHUB_LOGIN --repo $ghrepo
+#  gh-create-update-secret --secret GITHUBPASSWORD 	--value $GITHUB_PASSWORD --repo $ghrepo
+
+#  gh-create-update-secret --secret BINTRAY_USERNAME 	--value $BINTRAY_USERNAME --repo $ghrepo
+#  gh-create-update-secret --secret BINTRAY_API_KEY  	--value $BINTRAY_API_KEY --repo $ghrepo
+
+#  gh-create-update-secret --secret DOCKER_USERNAME  	--value $DOCKER_USERNAME --repo $ghrepo
+#  gh-create-update-secret --secret DOCKER_PASSWORD  	--value $DOCKER_PASSWORD --repo $ghrepo
+
+#  gh-create-update-secret --secret SONAR_TOKEN 		--value $SONAR_TOKEN --repo $ghrepo
+name: Java CI
+
+# on every push
+on: [push]
+
+env:
+  GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
+  GITHUBPASSWORD: ${{secrets.GITHUBPASSWORD}}
+  BINTRAY_USERNAME: ${{secrets.BINTRAY_USERNAME}}
+  BINTRAY_API_KEY: ${{secrets.BINTRAY_API_KEY}}
+  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+
+jobs:
+  # This job build, test, package and deploy the artefact
+  maven-build:
+    # The tags on the runner
+    runs-on: [self-hosted, Linux]
+
+    steps:
+      #we get the content of the repository
+      - uses: actions/checkout@v2
+      # install a JDK8
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      ## TOO SLOW WITH A SELF HOSTED RUNNER
+      ## sets a cache between builds for the maven repository
+      #- name: Cache Maven packages
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: ~/.m2
+      #    key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+      #    restore-keys: ${{ runner.os }}-m2
+
+      # and build the projet with a specific maven settings.xml
+      # it contains env variables from github secrets for the credentials
+      # to github, dockerhub and bintray
+      - name: Build and test with Maven
+        run: mvn -B --settings ci-settings.xml clean verify
+      - name: Deploy Maven Artifact
+        run: mvn -B --settings ci-settings.xml deploy
+
+  # This job publish the site for develop branch
+  maven-site:
+    runs-on: [self-hosted, Linux]
+    needs: maven-build
+    # Develop branch only
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Build and deploy site with Maven
+        run: mvn -B --settings ci-settings.xml site:site site:deploy
+

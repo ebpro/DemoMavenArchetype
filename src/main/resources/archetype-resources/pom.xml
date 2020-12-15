@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  quickstart
+  %%
+  Copyright (C) 2020 Université de Toulon
+  %%
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+  #L%
+  -->
+
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -16,16 +42,15 @@
 
     <properties>
         <app.main.class>${package}.App</app.main.class>
-        <github.account>emmanuelbruno</github.account>
+        <github.account>${githubAccount}</github.account>
 
         <!-- Add a github server entry in ~/.m2/settings.xml -->
 
         <!-- maven.compiler.release>8</maven.compiler.release -->
     </properties>
 
-    <name>MyApp</name>
-    <description>A Java Application with a powerfull parent POM</description>
-    <inceptionYear>${maven.build.timestamp}</inceptionYear>
+    <name>${artifactId}</name>
+    <inceptionYear>2020</inceptionYear>
     <!--licenses>
       <license>
         <name>mit</name>
@@ -62,7 +87,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <plugins>
             <plugin>
@@ -75,5 +99,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <scm>
+        <url>https://github.com/${github.account}/${project.artifactId}/tree/${project.scm.tag}</url>
+        <connection>scm:git:git@github.com:${github.account}/${project.artifactId}.git</connection>
+        <developerConnection>scm:git:git@github.com:${github.account}/${project.artifactId}.git</developerConnection>
+    </scm>
 
 </project>

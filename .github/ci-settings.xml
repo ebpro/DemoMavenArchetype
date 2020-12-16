@@ -10,16 +10,10 @@
             <password>${env.GITHUBPASSWORD}</password>
         </server>
         <server>
-            <id>bintray</id>
-            <username>${env.BINTRAY_USERNAME}</username>
-            <password>${env.BINTRAY_API_KEY}</password>
-        </server>
-        <server>
             <id>dockerhub</id>
             <username>${env.DOCKER_USERNAME}</username>
             <password>${env.DOCKER_PASSWORD}</password>
         </server>
-
         <server>
             <id>github.pages</id>
             <username>git</username>

@@ -52,7 +52,7 @@
     </extensions>
   </build>
 
-  <distributionManagement>
+  <!--distributionManagement>
     <repository>
       <id>github</id>
       <name>GitHub Packages</name>
@@ -67,7 +67,7 @@
       <id>github.pages</id>
       <url>scm:git:ssh://git@github.com/${github.account}/${project.artifactId}</url>
     </site>
-  </distributionManagement>
+  </distributionManagement-->
 
   <name>Demo Maven Archetype</name>
   <description>A maven archetype for CI applications</description>

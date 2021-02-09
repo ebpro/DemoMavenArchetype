@@ -36,14 +36,30 @@ jobs:
     steps:
       #we get the content of the repository
       - uses: actions/checkout@v2
-      # Build the projet with a specific maven settings.xml in docker
-      # it contains env variables from github secrets for the credentials
-      # to github, dockerhub and bintray
+
+      # build the project in a docker container with a specific maven settings.xml
+      # it uses env variables from github secrets for the credentials
+      # to github, dockerhub and sonar.
       - name: Build and test with Maven in docker
         run: ./mvn.sh clean verify
-      # Deploy the packages
-      - name: Deploy Maven Artifact
+      - name: Deploy Maven Artifacts
         run: ./mvn.sh deploy
+      - uses: skitionek/notify-microsoft-teams@master
+        if: success()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          overwrite: "{title: `Builded and deployed.`}"
+      - uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          overwrite: "{title: `Failure to build and deploy.`}"
 
   # This job publish the site for develop branch
   maven-site:
@@ -53,4 +69,20 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     steps:
       - name: Build and deploy site with Maven
-        run: ./mvn.sh site:site site:deploy
+        run: ./mvn.sh site:site site-deploy
+      - uses: skitionek/notify-microsoft-teams@master
+        if: success()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          overwrite: "{title: `WebSite deployed`}"
+      - uses: skitionek/notify-microsoft-teams@master
+        if: failure()
+        with:
+          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
+          needs: ${{ toJson(needs) }}
+          job: ${{ toJson(job) }}
+          steps: ${{ toJson(steps) }}
+          overwrite: "{title: `Failure to deploy Website.`}"

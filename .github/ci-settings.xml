@@ -28,8 +28,7 @@
         <profile>
             <id>sonar</id>
             <properties>
-                <sonar.host.url>https://sonar.lsis.univ-tln.fr</sonar.host.url>
-                <!-- generate a token in https://sonar.lsis.univ-tln.fr/account/security -->
+                <sonar.host.url>http://pc-bruno:9000</sonar.host.url>
                 <sonar.login>${env.SONAR_TOKEN}</sonar.login>
             </properties>
         </profile>

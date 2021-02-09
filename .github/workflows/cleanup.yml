@@ -1,0 +1,12 @@
+name: Delete Old Snpashot Package  # on every push
+on: [push]
+jobs:
+  cleanup:
+    # The tags on the runner
+    runs-on: [self-hosted, Linux]
+    steps:
+        - uses: smartsquaregmbh/delete-old-packages@v0.2.0
+          with:
+            keep: 1
+            names: |
+              fr.univtln.bruno.demos.poms.demoparentpom

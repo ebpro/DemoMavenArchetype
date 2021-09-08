@@ -17,15 +17,15 @@ The application can simply be packaged without and with dependencies.
 The default main class of the manifest is defined (see pom.xml).
 ```console
 cd MyApp
-# the shade plugin generate two artifacts
-mvn package
+# Compile, runs unit and integration tests (the shade plugin generate two artifacts) and package.
+mvn verify
 # Execution from Maven
 mvn exec:java
 # Execution as a uber jar
 java -jar target/myapp-${project.version}-withdependencies.jar
 ```
 
-After enabling git versioning and creating a github repository with the official (https://github.com/cli/cli)[CLI]
+Activate git versioning. A default Java .gitignore should be already included (but a bug in the jar plugins prevents it).
 ```console
 curl --silent \
     https://gist.githubusercontent.com/emmanuelbruno/906d26c8ef1ff14a9dea989f71445112/raw/afcbe268816c84a78aa69341e4c800c469f1c643/.gitignore \
@@ -33,19 +33,55 @@ curl --silent \
 git init
 git add .
 git commit -m "Initial release."
-git branch gh-pages && git push --set-upstream origin gh-pages
+```
+
+You can create a github repository with the official [CLI](https://github.com/cli/cli)
+and add an empty branch gh-pages for the projet website on github.
+
+```console
 gh repo create \
     --confirm \
     --enable-wiki=false \
     --description "A simple CI Java Application" \
-    --private https://emmanuelbruno.github.io/${project.artifactId}/ \
-    --homepage
+    --private \
+    --homepage https://${githubAccount}.github.io/${project.artifactId}/README.html
+
+git push --set-upstream origin master
 ```
 
-The gitflow workflow can be used to manage branch and maven artifact version.
+to create an empty gh-pages branch, clones the repository ** somewhere else ** and :
+```console
+# create gh-pages branch
+git checkout --orphan gh-pages
+git rm -rf .
+touch README.md
+git add README.md
+git commit -m 'initial gh-pages commit'
+git push origin gh-pages
+```
+
+
+The gitflow workflow can be used to manage branch and maven artifact version :
+
+start a feature (see the version in the pom.xml and in the uber jar name):
 ```console
 mvn -DallowSnapshots=true -DfeatureName=myfeature1 jgitflow:feature-start
+mvn package
+```
+
+back to develop branch
+```console
+git checkout develop
+```
+
+start another feature
+```console
+mvn -DallowSnapshots=true -DfeatureName=myfeature1 jgitflow:feature-start
+```
+
+```console
 mvn -DallowSnapshots=true jgitflow:feature-finish
+
 mvn -DallowSnapshots=true jgitflow:release-start
 mvn -DallowSnapshots=true jgitflow:release-fin
 ```
@@ -55,7 +91,17 @@ Artifacts can automatically be deployed to Github packages.
 mvn deploy
 ```
 
-A website can be automatically generated and deployed to github.
+A website can be automatically generated
 ```console
 mvn site
+```
+
+The website can displayed in a local web server
+```console
+mvn site:run
+```
+
+The website can be deployed to github pages.
+```mvn consile
+mvn site-deploy
 ```

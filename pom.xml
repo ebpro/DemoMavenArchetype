@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <properties>
-    <github.account>emmanuelbruno</github.account>
+    <github.account>ebpro</github.account>
     <app.main.class />
   </properties>
 
@@ -26,7 +26,7 @@
       and this repository is needed to find the parent.
       -->
       <!--url>https://maven.pkg.github.com/${github.account}/${project.artifactId}</url-->
-      <url>https://maven.pkg.github.com/emmanuelbruno/demomavenarchetype</url>
+      <url>https://maven.pkg.github.com/ebpro/demomavenarchetype</url>
     </repository>
   </repositories>
 
@@ -50,6 +50,15 @@
         <version>3.1.1</version>
       </extension>
     </extensions>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <!-- DONT UPGRADE AFTER 2.3 or .gitignore is not included -->
+        <version>2.3</version>
+      </plugin>
+
+    </plugins>
   </build>
 
   <!--distributionManagement>

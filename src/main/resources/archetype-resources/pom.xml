@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   #%L
   quickstart
   %%
@@ -50,7 +49,7 @@
     </properties>
 
     <name>${artifactId}</name>
-    <inceptionYear>2020</inceptionYear>
+    <inceptionYear>2021</inceptionYear>
     <!--licenses>
       <license>
         <name>mit</name>
@@ -76,11 +75,14 @@
       </developer>
     </developers-->
 
+
     <dependencies>
+        <!-- Unit Test UT -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -89,14 +91,34 @@
 
     <build>
         <plugins>
+            <!-- Git flow integration -->
             <plugin>
                 <groupId>external.atlassian.jgitflow</groupId>
                 <artifactId>jgitflow-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Uber jar building
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <!-- DON'T MINIMIZE IF SOME CLASS USAGES CANNOT BE DISCOVERED (Dependency Injection) -->
+                <!--configuration>
+                    <minimizeJar>false</minimizeJar>
+                </configuration-->
             </plugin>
+
+            <!-- Integration Tests IT -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <!-- Code coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+
         </plugins>
     </build>
 

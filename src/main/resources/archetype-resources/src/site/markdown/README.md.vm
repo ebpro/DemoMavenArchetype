@@ -1,23 +1,10 @@
 # Usage
-This archetype can create a simple Java Project ready for Continuous Integration (CI).
-Set your `-DgithubAccount=` and change `-DgroupId` and `-DartifactId` to match the new application ones.
-
-```console
-mvn archetype:generate \
- -DarchetypeGroupId=${project.groupId} \
- -DarchetypeArtifactId=${project.artifactId} \
- -DarchetypeVersion=${project.version} \
- -DgithubAccount=<YOURGITHUBACCOUNT> \
- -DgroupId=fr.univtln.bruno.demos \
- -DartifactId=myapp \
- -Dversion=1.0-SNAPSHOT
-```
+This simple Java Project is ready for Continuous Integration (CI).
 
 The application can simply be packaged without and with dependencies.
 The default main class of the manifest is defined (see pom.xml).
 ```console
-cd MyApp
-# Compile, runs unit and integration tests (the shade plugin generate two artifacts) and package.
+# Compile, run unit and integration tests (the shade plugin generate two artifacts) and package.
 mvn verify
 # Execution from Maven
 mvn exec:java
@@ -25,11 +12,8 @@ mvn exec:java
 java -jar target/myapp-${project.version}-withdependencies.jar
 ```
 
-Activate git versioning. A default Java .gitignore should be already included (but a bug in the jar plugins prevents it).
+Activate git versioning. A default Java .gitignore is already included.
 ```console
-curl --silent \
-    https://gist.githubusercontent.com/emmanuelbruno/906d26c8ef1ff14a9dea989f71445112/raw/afcbe268816c84a78aa69341e4c800c469f1c643/.gitignore \
-    -o .gitignore
 git init
 git add .
 git commit -m "Initial release."
@@ -60,8 +44,7 @@ git commit -m 'initial gh-pages commit'
 git push origin gh-pages
 ```
 
-
-The gitflow workflow can be used to manage branch and maven artifact version :
+The gitflow workflow can be used to manage branches and maven artifacts version :
 
 start a feature (see the version in the pom.xml and in the uber jar name):
 ```console
@@ -103,6 +86,6 @@ mvn site:run
 
 The website can be deployed to github pages.
 ```console
-mvn compile
+mvn conpile
 mvn site-deploy
 ```

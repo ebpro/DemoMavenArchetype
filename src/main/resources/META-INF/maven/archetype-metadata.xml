@@ -62,6 +62,7 @@ under the License.
                 <include>rules.xml</include>
                 <include>.gitignore</include>
                 <include>sonar.sh</include>
+                <include>mvn.sh</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" packaged="false" encoding="UTF-8">

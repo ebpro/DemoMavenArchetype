@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   #%L
   quickstart
   %%
@@ -56,6 +55,21 @@ under the License.
         </fileSet>
         <fileSet filtered="true" packaged="true">
             <directory>src/test/java</directory>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory />
+            <includes>
+                <include>rules.xml</include>
+                <include>.gitignore</include>
+                <include>sonar.sh</include>
+                <include>mvn.sh</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+            <directory>src/site</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
         </fileSet>
     </fileSets>
 

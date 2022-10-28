@@ -55,7 +55,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <!-- DONT UPGRADE AFTER 2.3 or .gitignore is not included -->
-        <version>2.3</version>
+        <!--version>2.3</version-->
       </plugin>
 
     </plugins>

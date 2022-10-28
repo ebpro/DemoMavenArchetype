@@ -1,3 +1,0 @@
-[submodule "CI_Java"]
-	path = CI_Java
-	url = git@github.com:ebpro/CI_Java.git

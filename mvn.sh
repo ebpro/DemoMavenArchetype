@@ -1,5 +1,5 @@
 #!/bin/bash
-export MAVEN_IMAGE=brunoe/maven:3.8.2-adoptopenjdk-16
+export MAVEN_IMAGE=brunoe/maven:3.8.6-eclipse-temurin-17
 docker run \
           --env GITHUBLOGIN=$GITHUBLOGIN \
           --env GITHUBPASSWORD=$GITHUBPASSWORD \

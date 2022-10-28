@@ -35,7 +35,7 @@ jobs:
 
     steps:
       #we get the content of the repository
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # build the project in a docker container with a specific maven settings.xml
       # it uses env variables from github secrets for the credentials
@@ -45,7 +45,7 @@ jobs:
       - name: Deploy Maven Artifacts
         run: ./mvn.sh deploy
       - name: Notify dedicated teams channel of Success
-        uses: jdcargile/ms-teams-notification@v1.3
+        uses: dragos-cojocari/ms-teams-notification@v1.0.0
         if: ${{ success() }}
         with:
           github-token: ${{ github.token }} # this will use the runner's token.
@@ -54,7 +54,7 @@ jobs:
           notification-color: 28a745
           timezone: Europe/Paris
       - name: Notify dedicated teams channel of Failure
-        uses: jdcargile/ms-teams-notification@v1.3
+        uses: dragos-cojocari/ms-teams-notification@v1.0.0
         if: ${{ failure() }}
         with:
           github-token: ${{ github.token }} # this will use the runner's token.
@@ -62,22 +62,6 @@ jobs:
           notification-summary: Build and Deploy failure.
           notification-color: dc3545
           timezone: Europe/Paris
-  #      - uses: skitionek/notify-microsoft-teams@master
-  #        if: success()
-  #        with:
-  #          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-  #          needs: ${{ toJson(needs) }}
-  #          job: ${{ toJson(job) }}
-  #          steps: ${{ toJson(steps) }}
-  #          overwrite: "{title: `Builded and deployed.`}"
-  #      - uses: skitionek/notify-microsoft-teams@master
-  #        if: failure()
-  #        with:
-  #          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-  #          needs: ${{ toJson(needs) }}
-  #          job: ${{ toJson(job) }}
-  #          steps: ${{ toJson(steps) }}
-  #          overwrite: "{title: `Failure to build and deploy.`}"
 
   # This job publish the successsite for develop branch
   maven-site:
@@ -88,19 +72,21 @@ jobs:
     steps:
       - name: Build and deploy site with Maven
         run: ./mvn.sh site:site site-deploy
-#      - uses: skitionek/notify-microsoft-teams@master
-#        if: success()
-#        with:
-#          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-#          needs: ${{ toJson(needs) }}
-#          job: ${{ toJson(job) }}
-#          steps: ${{ toJson(steps) }}
-#          overwrite: "{title: `WebSite deployed`}"
-#      - uses: skitionek/notify-microsoft-teams@master
-#        if: failure()
-#        with:
-#          webhook_url: ${{ secrets.MSTEAMS_WEBHOOK }}
-#          needs: ${{ toJson(needs) }}
-#          job: ${{ toJson(job) }}
-#          steps: ${{ toJson(steps) }}
-#          overwrite: "{title: `Failure to deploy Website.`}"
+      - name: Notify dedicated teams channel of Success
+        uses: dragos-cojocari/ms-teams-notification@v1.0.0
+        if: ${{ success() }}
+        with:
+          github-token: ${{ github.token }} # this will use the runner's token.
+          ms-teams-webhook-uri: ${{ secrets.MSTEAMS_WEBHOOK }}
+          notification-summary: Web site deployed.
+          notification-color: 28a745
+          timezone: Europe/Paris
+      - name: Notify dedicated teams channel of Failure
+        uses: dragos-cojocari/ms-teams-notification@v1.0.0
+        if: ${{ failure() }}
+        with:
+          github-token: ${{ github.token }} # this will use the runner's token.
+          ms-teams-webhook-uri: ${{ secrets.MSTEAMS_WEBHOOK }}
+          notification-summary: Failed to deploy web site.
+          notification-color: dc3545
+          timezone: Europe/Paris

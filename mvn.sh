@@ -5,7 +5,7 @@ docker run \
           --env GITHUBPASSWORD=$GITHUBPASSWORD \
           --volume ~/.m2:/var/maven/.m2 \
           --volume ~/.ssh:/home/user/.ssh \
-          --volume ~/.gitconfig:/home/user/.gitconfig \
+          --mount type=bind,source=${HOME}/.gitconfig,target=/home/user/.gitconfig,readonly \
           --volume "$(pwd)":/usr/src/mymaven \
           --workdir /usr/src/mymaven \
           --rm \

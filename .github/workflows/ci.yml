@@ -21,6 +21,7 @@ env:
   DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
   SONAR_URL: ${{secrets.SONAR_URL}}
   SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+  MSTEAMS_WEBHOOK: ${{ secrets.MSTEAMS_WEBHOOK }}
 
 jobs:
   # This job build, test, package and deploy the artefact
@@ -34,14 +35,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Build and deploy with Maven and Docker
         uses: ebpro/ci-java-build-action@develop
-        with:
-          GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
-          GITHUBPASSWORD: ${{secrets.GITHUBPASSWORD}}
-          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-          SONAR_URL: ${{secrets.SONAR_URL}}
-          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
-          MSTEAMS_WEBHOOK: ${{ secrets.MSTEAMS_WEBHOOK }}
 
   # This job publish the successsite for develop branch
   maven-site:

@@ -33,7 +33,15 @@ jobs:
       - name: Checkout repository and submodules
         uses: actions/checkout@v3
       - name: Build and deploy with Maven and Docker
-        uses: ebpro/ci-java-build-action@v0.6
+        uses: ebpro/ci-java-build-action@v0.7
+        with:
+          GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
+          GITHUBPASSWORD: ${{secrets.GITHUBPASSWORD}}
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+          SONAR_URL: ${{secrets.SONAR_URL}}
+          SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+          MSTEAMS_WEBHOOK: ${{ secrets.MSTEAMS_WEBHOOK }}
 
   # This job publish the successsite for develop branch
   maven-site:

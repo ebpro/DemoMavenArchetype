@@ -33,7 +33,7 @@ jobs:
       - name: Checkout repository and submodules
         uses: actions/checkout@v3
       - name: Build and deploy with Maven and Docker
-        uses: ebpro/ci-java-build-action@v0.4
+        uses: ebpro/ci-java-build-action@v0.5
 
   # This job publish the successsite for develop branch
   maven-site:

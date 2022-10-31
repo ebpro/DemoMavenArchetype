@@ -1,8 +1,10 @@
+#!/bin/bash
+
 ###
 # #%L
 # Demo Maven Archetype
 # %%
-# Copyright (C) 2020 - 2021 Université de Toulon
+# Copyright (C) 2020 - 2022 Université de Toulon
 # %%
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,5 +25,16 @@
 # THE SOFTWARE.
 # #L%
 ###
-mvn verify
-mvn sonar:sonar -D sonar.branch.name=$(git rev-parse --abbrev-ref HEAD|tr / _ ) -DskipTests=true -Dsonar.language=java -Dsonar.report.export.path=sonar-report.json -Dsonar.host.url=http://localhost:9000 --activate-profiles sonar
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. ${SCRIPT_DIR}/docker_env.sh
+
+DOCKER_BUILDKIT=1 \
+  docker build \
+  	-t ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG} \
+	--file ${SCRIPT_DIR}/Dockerfile \
+	--build-arg DOCKER_USERNAME=$DOCKER_USERNAME \
+	--build-arg DOCKER_PASSWORD=$DOCKER_PASSWORD \
+	--build-arg SONAR_TOKEN=$SONAR_TOKEN \
+	--build-arg SONAR_URL=$SONAR_URL \
+	--build-arg GITHUBLOGIN=$GITHUBLOGIN \
+	--build-arg GITHUBPASSWORD=$GITHUBPASSWORD \

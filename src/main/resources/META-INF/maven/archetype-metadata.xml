@@ -61,8 +61,6 @@ under the License.
             <includes>
                 <include>rules.xml</include>
                 <include>.gitignore</include>
-                <include>sonar.sh</include>
-                <include>mvn.sh</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
@@ -71,6 +69,19 @@ under the License.
                 <include>**/*</include>
             </includes>
         </fileSet>
+        <fileSet filtered="false" packaged="false" encoding="UTF-8">
+            <directory>docker-build</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="false" packaged="false" encoding="UTF-8">
+            <directory>docker-image</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+
     </fileSets>
 
     <requiredProperties>

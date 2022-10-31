@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker-image/Dockerfile
+      args:
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+        - SONAR_URL=${SONAR_URL}
+        - SONAR_TOKEN=${SONAR_TOKEN}
+        - GITHUBLOGIN=${GITHUBLOGIN}
+        - GITHUBPASSWORD=${GITHUBPASSWORD}
+    image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+    depends_on:
+      - db
+    environment:
+      # The host and TCP port to wait for
+      # Wait host must be installed in the docker image (see Dockerfile)
+      WAIT_HOSTS: db:5432
+
+      DB_URL: ${DB_URL:-jdbc:postgresql://db:5432/}${DB_NAME:-demodb}
+      DB_USER: ${DB_USER:-demodba}
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      DB_NAME: ${DB_NAME:-demodb}
+
+  db:
+    restart: always
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${DB_USER:-demodba}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_DB: ${DB_NAME:-demodb}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg_data:

@@ -36,6 +36,14 @@ jobs:
       - name: Build and deploy with Maven and Docker
         uses: ebpro/ci-java-build-action@develop
 
+  # This job runs sonar aga int the build for every branches
+  maven-sonar:
+    runs-on: [self-hosted, Linux]
+    needs: maven-build
+    steps:
+      - name: Run Sonar
+        uses: ebpro/ci-java-sonar-action@develop
+
   # This job publish the website for develop branch
   maven-site:
     runs-on: [self-hosted, Linux]

@@ -44,10 +44,16 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+<archetype-descriptor xmlns="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+    xsi:schemaLocation="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0 http://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
     name="${artifactId}">
+
+    <requiredProperties>
+        <requiredProperty key="githubAccount">
+            <defaultValue>emmanuelbruno</defaultValue>
+        </requiredProperty>
+    </requiredProperties>
 
     <fileSets>
         <fileSet filtered="true" packaged="true">
@@ -56,38 +62,31 @@ under the License.
         <fileSet filtered="true" packaged="true">
             <directory>src/test/java</directory>
         </fileSet>
-        <fileSet filtered="true" packaged="false" encoding="UTF-8">
-            <directory />
-            <includes>
-                <include>rules.xml</include>
-                <include>.gitignore</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+        <fileSet filtered="true" encoding="UTF-8">
             <directory>src/site</directory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
-        <fileSet filtered="false" packaged="false" encoding="UTF-8">
+        <!--fileSet encoding="UTF-8">
+            <directory />
+            <includes>
+                <include>rules.xml</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet-->
+        <fileSet encoding="UTF-8">
             <directory>docker-build</directory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
-        <fileSet filtered="false" packaged="false" encoding="UTF-8">
+        <fileSet encoding="UTF-8">
             <directory>docker-image</directory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
-
     </fileSets>
-
-    <requiredProperties>
-        <requiredProperty key="githubAccount">
-            <defaultValue>emmanuelbruno</defaultValue>
-        </requiredProperty>
-    </requiredProperties>
 
 </archetype-descriptor>

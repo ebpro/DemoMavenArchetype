@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   #%L
   quickstart
   %%
@@ -58,16 +57,16 @@
     </licenses>
     <organization>
       <name>Université de Toulon</name>
-      <url>http://www.univ-tln.fr</url>
+      <url>https://www.univ-tln.fr</url>
     </organization>
     <developers>
       <developer>
         <id>emmanuelbruno</id>
         <name>Emmanuel Bruno</name>
         <email>emmanuel.bruno@univ-tln.fr</email>
-        <url>http://bruno.univ-tln.fr</url>
+        <url>https://bruno.univ-tln.fr</url>
         <organization>Université de Toulon</organization>
-        <organizationUrl>http://www.univ-tln.fr</organizationUrl>
+        <organizationUrl>https://www.univ-tln.fr</organizationUrl>
         <roles>
           <role>architect</role>
           <role>developer</role>
@@ -78,37 +77,22 @@
 
 
     <dependencies>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Unit Test UT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Git flow integration -->
-            <plugin>
-                <groupId>external.atlassian.jgitflow</groupId>
-                <artifactId>jgitflow-maven-plugin</artifactId>
-            </plugin>
-
-            <!-- Uber jar building
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <!-- DON'T MINIMIZE IF SOME CLASS USAGES CANNOT BE DISCOVERED (Dependency Injection) -->
-                <!--configuration>
-                    <minimizeJar>false</minimizeJar>
-                </configuration-->
-            </plugin>
-
             <!-- Integration Tests IT -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -119,7 +103,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
-
         </plugins>
     </build>
 

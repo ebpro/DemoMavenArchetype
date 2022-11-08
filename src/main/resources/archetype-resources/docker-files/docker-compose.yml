@@ -1,0 +1,49 @@
+services:
+  shaded:
+    image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+    build:
+      context: ..
+      dockerfile: docker-files/Dockerfile
+      args:
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+        - SONAR_URL=${SONAR_URL}
+        - SONAR_TOKEN=${SONAR_TOKEN}
+        - GITHUBLOGIN=${GITHUBLOGIN}
+        - GITHUBPASSWORD=${GITHUBPASSWORD}
+  jlink:
+    image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}-jlink
+    build:
+      context: ..
+      dockerfile: docker-files/Dockerfile.jlink
+      args:
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+        - SONAR_URL=${SONAR_URL}
+        - SONAR_TOKEN=${SONAR_TOKEN}
+        - GITHUBLOGIN=${GITHUBLOGIN}
+        - GITHUBPASSWORD=${GITHUBPASSWORD}
+  graalvm:
+    image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}-graalvm
+    build:
+      context: ..
+      dockerfile: docker-files/Dockerfile.graalvm
+      args:
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+        - SONAR_URL=${SONAR_URL}
+        - SONAR_TOKEN=${SONAR_TOKEN}
+        - GITHUBLOGIN=${GITHUBLOGIN}
+        - GITHUBPASSWORD=${GITHUBPASSWORD}
+  graalvmalpine:
+    image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}-graalvm-alpine
+    build:
+      context: ..
+      dockerfile: docker-files/Dockerfile.graalvm.alpine
+      args:
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+        - SONAR_URL=${SONAR_URL}
+        - SONAR_TOKEN=${SONAR_TOKEN}
+        - GITHUBLOGIN=${GITHUBLOGIN}
+        - GITHUBPASSWORD=${GITHUBPASSWORD}

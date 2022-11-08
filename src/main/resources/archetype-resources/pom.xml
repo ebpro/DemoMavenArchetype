@@ -42,10 +42,7 @@
     <properties>
         <app.main.class>${package}.App</app.main.class>
         <github.account>${githubAccount}</github.account>
-
         <!-- Add a github server entry in ~/.m2/settings.xml -->
-
-        <maven.compiler.release>17</maven.compiler.release>
     </properties>
 
     <name>${artifactId}</name>
@@ -88,6 +85,12 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
+        <!-- SLF4J with logBack -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
     </dependencies>
 

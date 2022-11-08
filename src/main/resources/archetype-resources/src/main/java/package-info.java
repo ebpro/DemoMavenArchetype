@@ -1,3 +1,7 @@
+/**
+ * A simple package documentation
+ */
+package $package;
 /*-
  * #%L
  * Demo Maven Archetype
@@ -23,9 +27,3 @@
  * THE SOFTWARE.
  * #L%
  */
-module $package {
-    requires java.logging;
-    requires static lombok;
-
-    exports $package;
-}

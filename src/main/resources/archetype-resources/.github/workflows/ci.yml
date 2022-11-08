@@ -1,0 +1,55 @@
+## A simple example to use  Github Actions for Java CI with docker and maven
+# We build the project using maven.
+# Maven is run in a dedicated docker container
+# The credentials are set as env variables in a specific ci-settings.xml
+# The ENV variables are stored as Github Secrets
+#
+# The secrets are set in CLI with the github client.
+# The following examples set them at organisation level (GITHUB_ORG variable)
+# bash -c 'for secret in GITHUBLOGIN GITHUBPASSWORD DOCKER_USERNAME DOCKER_PASSWORD SONAR_URL SONAR_TOKEN; do \
+#    eval gh secret set $secret --app actions  --body ${!secret} --org $GITHUB_ORG --visibility all; \
+# done'
+name: Java CI
+
+# on every push
+on: [push]
+
+# We set env variables for shell, docker and maven.
+env:
+  GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
+  GITHUBPASSWORD: ${{secrets.GITHUBPASSWORD}}
+  DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  SONAR_URL: ${{secrets.SONAR_URL}}
+  SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
+  MSTEAMS_WEBHOOK: ${{ secrets.MSTEAMS_WEBHOOK }}
+
+jobs:
+  # This job build, test, package and deploy the artefact
+  maven-build:
+    # The tags on the runner
+    runs-on: [self-hosted, Linux]
+    steps:
+      #we get the content of the repository    -
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v3
+      - name: Build and deploy with Maven and Docker
+        uses: ebpro/ci-java-build-action@develop
+
+  # This job runs sonar aga int the build for every branches
+  maven-sonar:
+    runs-on: [self-hosted, Linux]
+    needs: maven-build
+    steps:
+      - name: Run Sonar
+        uses: ebpro/ci-java-sonar-action@develop
+
+  # This job publish the website for develop branch
+  maven-site:
+    runs-on: [self-hosted, Linux]
+    needs: maven-build
+    # Develop branch only
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Build and deploy site with Maven
+        uses: ebpro/ci-java-site-action@develop

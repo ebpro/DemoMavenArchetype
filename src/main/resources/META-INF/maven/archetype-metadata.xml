@@ -58,9 +58,24 @@ under the License.
     <fileSets>
         <fileSet filtered="true" packaged="true">
             <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+            <excludes>
+                <exclude>module-info.java</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet filtered="true">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>module-info.java</include>
+            </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true">
             <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
             <directory>src/site</directory>
@@ -68,21 +83,35 @@ under the License.
                 <include>**/*</include>
             </includes>
         </fileSet>
-        <!--fileSet encoding="UTF-8">
+        <fileSet encoding="UTF-8">
             <directory />
             <includes>
                 <include>rules.xml</include>
                 <include>.gitignore</include>
+                <include>.dockerignore</include>
+                <include>README.md</include>
             </includes>
-        </fileSet-->
+        </fileSet>
         <fileSet encoding="UTF-8">
-            <directory>docker-build</directory>
+            <directory>.github</directory>
             <includes>
                 <include>**/*</include>
             </includes>
         </fileSet>
         <fileSet encoding="UTF-8">
-            <directory>docker-image</directory>
+            <directory>docker-files</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory>docker-utils</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+            <directory>docker-wrappers</directory>
             <includes>
                 <include>**/*</include>
             </includes>

@@ -2,9 +2,9 @@ package $package;
 
 /*-
  * #%L
- * quickstart
+ * Demo Maven Archetype
  * %%
- * Copyright (C) 2020 Université de Toulon
+ * Copyright (C) 2020 - 2022 Université de Toulon
  * %%
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +26,52 @@ package $package;
  * #L%
  */
 
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 /**
  * Unit test for simple App.
  */
-class AppTest
-{
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    void shouldAnswerWithTrue()
-    {
-        assertTrue( true );
+@Slf4j
+class AppTest {
+    @BeforeAll
+    static void init() {
+        log.info("Once before all tests.");
     }
+
+    @AfterAll
+    static void close() {
+        log.info("Once after all tests.");
+    }
+
+    @BeforeEach
+    void prepare() {
+        log.info("Before each test.");
+    }
+
+    @AfterEach
+    void end() {
+        log.info("After each test.");
+    }
+
+    @Test
+        //@Disable
+    void shouldAnswerWithTrue() {
+        //Assumption to check that tests condition are ok (optional).
+        //Notice the static import.
+        assumeTrue(10 < 100);
+
+        assertTrue(true);
+    }
+
+    @Test
+    void checkException() {
+        assertThrows(ArithmeticException.class, () -> {
+            int x = 3 / 0;
+        });
+    }
+
 }

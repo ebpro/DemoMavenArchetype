@@ -27,14 +27,9 @@
 ###
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${SCRIPT_DIR}/docker_env.sh
-
-DOCKER_BUILDKIT=1 \
-  docker build \
-  	-t ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG} \
-	--file ${SCRIPT_DIR}/Dockerfile \
-	--build-arg DOCKER_USERNAME=$DOCKER_USERNAME \
-	--build-arg DOCKER_PASSWORD=$DOCKER_PASSWORD \
-	--build-arg SONAR_TOKEN=$SONAR_TOKEN \
-	--build-arg SONAR_URL=$SONAR_URL \
-	--build-arg GITHUBLOGIN=$GITHUBLOGIN \
-	--build-arg GITHUBPASSWORD=$GITHUBPASSWORD \
+DOCKER_REPO_NAME=$DOCKER_REPO_NAME \
+IMAGE_NAME=$IMAGE_NAME \
+IMAGE_TAG=$IMAGE_TAG \
+COMPOSE_DOCKER_CLI_BUILD=1 \
+DOCKER_BUILDKIT=1  \
+  docker compose "$@"

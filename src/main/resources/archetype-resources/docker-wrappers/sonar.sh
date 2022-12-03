@@ -23,5 +23,11 @@
 # THE SOFTWARE.
 # #L%
 ###
-mvn verify
-mvn sonar:sonar -D sonar.branch.name=$(git rev-parse --abbrev-ref HEAD|tr / _ ) -DskipTests=true -Dsonar.language=java -Dsonar.report.export.path=sonar-report.json -Dsonar.host.url=${SONAR_URL} --activate-profiles sonar
+mvn -P jacoco verify
+mvn sonar:sonar \
+  -D sonar.branch.name=$(git rev-parse --abbrev-ref HEAD|tr / _ ) \
+  -DskipTests=true \
+  -Dsonar.language=java \
+  -Dsonar.report.export.path=sonar-report.json \
+  -Dsonar.host.url=${SONAR_URL} \
+  --activate-profiles sonar

@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  * #L%
  */
-module $package {
+module $package.$artifactId {
     requires java.logging;
     requires static lombok;
 

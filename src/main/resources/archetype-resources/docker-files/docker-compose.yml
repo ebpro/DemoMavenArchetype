@@ -9,8 +9,8 @@ services:
         - DOCKER_PASSWORD=${DOCKER_PASSWORD}
         - SONAR_URL=${SONAR_URL}
         - SONAR_TOKEN=${SONAR_TOKEN}
-        - GITHUBLOGIN=${GITHUBLOGIN}
-        - GITHUBPASSWORD=${GITHUBPASSWORD}
+        - GITHUB_LOGIN=${GITHUB_LOGIN}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
   jlink:
     image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}-jlink
     build:
@@ -21,8 +21,8 @@ services:
         - DOCKER_PASSWORD=${DOCKER_PASSWORD}
         - SONAR_URL=${SONAR_URL}
         - SONAR_TOKEN=${SONAR_TOKEN}
-        - GITHUBLOGIN=${GITHUBLOGIN}
-        - GITHUBPASSWORD=${GITHUBPASSWORD}
+        - GITHUB_LOGIN=${GITHUB_LOGIN}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
   graalvm:
     image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}-graalvm
     build:
@@ -33,8 +33,8 @@ services:
         - DOCKER_PASSWORD=${DOCKER_PASSWORD}
         - SONAR_URL=${SONAR_URL}
         - SONAR_TOKEN=${SONAR_TOKEN}
-        - GITHUBLOGIN=${GITHUBLOGIN}
-        - GITHUBPASSWORD=${GITHUBPASSWORD}
+        - GITHUB_LOGIN=${GITHUB_LOGIN}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
   graalvmalpine:
     image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}-graalvm-alpine
     build:
@@ -45,5 +45,5 @@ services:
         - DOCKER_PASSWORD=${DOCKER_PASSWORD}
         - SONAR_URL=${SONAR_URL}
         - SONAR_TOKEN=${SONAR_TOKEN}
-        - GITHUBLOGIN=${GITHUBLOGIN}
-        - GITHUBPASSWORD=${GITHUBPASSWORD}
+        - GITHUB_LOGIN=${GITHUB_LOGIN}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}

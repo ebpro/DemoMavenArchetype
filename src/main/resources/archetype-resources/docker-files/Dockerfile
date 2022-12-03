@@ -5,11 +5,11 @@ FROM maven:3.8-eclipse-temurin-17-focal AS build
 WORKDIR /myproject
 
 # We git important parameteres as build-arg
-ARG GITHUBLOGIN
-ARG GITHUBPASSWORD
+ARG GITHUB_LOGIN
+ARG GITHUB_TOKEN
 # and we transfer them as env variable (for maven settings substitution).
-ENV GITHUBLOGIN=$GITHUBLOGIN
-ENV GITHUBPASSWORD=$GITHUBPASSWORD
+ENV GITHUB_LOGIN=$GITHUB_LOGIN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
 
 COPY pom.xml .
 COPY src src

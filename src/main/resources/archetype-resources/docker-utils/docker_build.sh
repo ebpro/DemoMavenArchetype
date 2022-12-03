@@ -35,8 +35,8 @@ DOCKER_BUILDKIT=1 \
 	--build-arg DOCKER_PASSWORD=$DOCKER_PASSWORD \
 	--build-arg SONAR_TOKEN=$SONAR_TOKEN \
 	--build-arg SONAR_URL=$SONAR_URL \
-	--build-arg GITHUBLOGIN=$GITHUBLOGIN \
-	--build-arg GITHUBPASSWORD=$GITHUBPASSWORD \
+	--build-arg GITHUB_LOGIN=$GITHUB_LOGIN \
+	--build-arg GITHUB_TOKEN=$GITHUBP_TOKEN \
 	-t ${DOCKER_REPO_NAME}/${IMAGE_NAME}:graalvm-${IMAGE_TAG} \
   -f docker-image/Dockerfile.graalvm \
   .

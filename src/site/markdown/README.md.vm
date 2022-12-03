@@ -15,6 +15,7 @@ mvn archetype:generate \
 
 The application can simply be packaged without and with dependencies.
 The default main class of the manifest is defined (see pom.xml).
+
 ```console
 cd MyApp
 # Compile, runs unit and integration tests (the shade plugin generate two artifacts) and package.
@@ -25,83 +26,26 @@ mvn exec:java
 java -jar target/myapp-${project.version}-withdependencies.jar
 ```
 
-Activate git versioning. A default Java .gitignore should be already included (but a bug in the jar plugins prevents it).
-```console
-curl --silent \
-    https://gist.githubusercontent.com/emmanuelbruno/906d26c8ef1ff14a9dea989f71445112/raw/afcbe268816c84a78aa69341e4c800c469f1c643/.gitignore \
-    -o .gitignore
-git init
-git add .
-git commit -m "Initial release."
-```
+Artifacts can automatically be deployed to GitHub packages.
 
-You can create a github repository with the official [CLI](https://github.com/cli/cli)
-and add an empty branch gh-pages for the projet website on github.
-
-```console
-gh repo create \
-    --confirm \
-    --enable-wiki=false \
-    --description "A simple CI Java Application" \
-    --private \
-    --homepage https://${githubAccount}.github.io/${project.artifactId}/README.html
-
-git push --set-upstream origin master
-```
-
-to create an empty gh-pages branch, clones the repository ** somewhere else ** and :
-```console
-# create gh-pages branch
-git checkout --orphan gh-pages
-git rm -rf .
-touch README.md
-git add README.md
-git commit -m 'initial gh-pages commit'
-git push origin gh-pages
-```
-
-
-The gitflow workflow can be used to manage branch and maven artifact version :
-
-start a feature (see the version in the pom.xml and in the uber jar name):
-```console
-mvn -DallowSnapshots=true -DfeatureName=myfeature1 jgitflow:feature-start
-mvn package
-```
-
-back to develop branch
-```console
-git checkout develop
-```
-
-start another feature
-```console
-mvn -DallowSnapshots=true -DfeatureName=myfeature1 jgitflow:feature-start
-```
-
-```console
-mvn -DallowSnapshots=true jgitflow:feature-finish
-
-mvn -DallowSnapshots=true jgitflow:release-start
-mvn -DallowSnapshots=true jgitflow:release-fin
-```
-
-Artifacts can automatically be deployed to Github packages.
 ```console
 mvn deploy
 ```
 
 A website can be automatically generated
+
 ```console
 mvn site
 ```
 
-The website can displayed in a local web server
+The website can be displayed in a local web server
+
 ```console
 mvn site:run
 ```
 
-The website can be deployed to github pages.
+The website can be deployed to GitHub pages.
+
 ```console
 mvn compile
 mvn site-deploy

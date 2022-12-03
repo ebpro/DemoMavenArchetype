@@ -30,7 +30,6 @@
     </repository>
   </repositories>
 
-
   <parent>
     <groupId>fr.univtln.bruno.demos.poms</groupId>
     <artifactId>demoparentpom</artifactId>

@@ -22,11 +22,11 @@ RUN source $SDKMAN_DIR/bin/sdkman-init.sh \
         && rm -rf $SDKMAN_DIR/tmp/*
 WORKDIR /myproject
 # We get important parameteres as build-arg
-ARG GITHUBLOGIN
-ARG GITHUBPASSWORD
+ARG GITHUB_LOGIN
+ARG GITHUB_TOKEN
 # and we transfer them as env variable (for maven settings substitution).
-ENV GITHUBLOGIN=$GITHUBLOGIN
-ENV GITHUBPASSWORD=$GITHUBPASSWORD
+ENV GITHUB_LOGIN=$GITHUB_LOGIN
+ENV GITHUB_TOKEN=$GITHUB_TOKEN
 COPY pom.xml .
 COPY src src
 COPY docker-files/ci-settings.xml .
@@ -35,5 +35,6 @@ RUN --mount=type=cache,id=mvncache,target=/root/.m2/repository,rw \
 	mvn -s ci-settings.xml -B -Pnative clean verify
 
 FROM alpine
-COPY --from=graalvmalpinebuild /myproject/target/fullgit /
-ENTRYPOINT /fullgit
+ENV BINARY_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+COPY --from=graalvmalpinebuild /myproject/target/${BINARY_NAME} /
+ENTRYPOINT /${BINARY_NAME}

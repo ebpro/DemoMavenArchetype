@@ -4,7 +4,7 @@
 # #%L
 # Demo Maven Archetype
 # %%
-# Copyright (C) 2020 - 2021 Université de Toulon
+# Copyright (C) 2020 - 2022 Université de Toulon
 # %%
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 # THE SOFTWARE.
 # #L%
 ###
+
 export MAVEN_IMAGE=brunoe/maven:3.8.6-eclipse-temurin-17
 docker run \
           --env GITHUBLOGIN=$GITHUBLOGIN \

@@ -23,6 +23,6 @@
 # THE SOFTWARE.
 # #L%
 ###
-DOCKER_REPO_NAME=brunoe
+DOCKER_REPO_NAME=${GITHUB_ORG}
 IMAGE_NAME=`echo ${PWD##*/}| tr '[:upper:]' '[:lower:]'`
 IMAGE_TAG=`git rev-parse --abbrev-ref HEAD`

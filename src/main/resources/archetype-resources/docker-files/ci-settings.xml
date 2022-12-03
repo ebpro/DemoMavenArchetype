@@ -31,8 +31,8 @@
     <servers>
         <server>
             <id>github</id>
-            <username>${env.GITHUBLOGIN}</username>
-            <password>${env.GITHUBPASSWORD}</password>
+            <username>${env.GITHUB_LOGIN}</username>
+            <password>${env.GITHUB_TOKEN}</password>
         </server>
         <server>
             <id>dockerhub</id>

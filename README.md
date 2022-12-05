@@ -5,17 +5,15 @@
 This project generates a complete Java+Maven project ready for Continuous Integration (CI).
 It is ready for GitFlow, SonarQube (tests, code coverage, ...). 
 It can produce signed artifacts, fat jars, slim runtime with jLink, native executables with GraalVM 
-and container images. The build can alse be done in a container.
+and container images. The build itself can also be done in a container.
 
 ## Configuration (Once)
 The configuration is done with environment variables.
-For GitHub : GITHUB_ORG (GitHub account or organisation), GITHUB_LOGIN, GITHUB_TOKEN
-
-And optionally for SonarQube set SONAR_URL and SONAR_TOKEN 
-and install SonarQube : https://github.com/ebpro/sonarqube
+For GitHub : GITHUB_ORG (GitHub account or organisation), GITHUB_LOGIN, GITHUB_TOKEN 
+and optionally for SonarQube SONAR_URL and SONAR_TOKEN (To install SonarQube see https://github.com/ebpro/sonarqube)
 
 Those variables have to be stored on the CI server (see [GitHub Encrypted secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)).
-The next script transforms the local variables in GitHub secrets.
+The script below transforms the local variables in GitHub secrets.
 
 ```bash
 bash -c 'for secret in GITHUB_LOGIN GITHUB_TOKEN SONAR_URL SONAR_TOKEN; do \
@@ -81,7 +79,7 @@ mvn -B gitflow:release-start -DpushRemote=true -DallowSnapshots=true -DuseSnapsh
 mvn -B gitflow:release-finish -DpushRemote=true -DallowSnapshots=true
 ```
 
-## A simple jar artefact
+## Artefact packaging
 
 ### Compilation and execution
 
@@ -123,15 +121,17 @@ java -jar target/*-withdependencies.jar
 
 ### Jlink
 
-Thanks to Jlink and a modular (jigsaw) java project, it is possible to generation a minimal JRE, modules 
-and dependencies. 
+Thanks to Jlink and a modular java project (jigsaw), it is possible to generate a minimal JRE 
+with needed modules and dependencies. 
 
 ```bash
 mvn -Pjlink clean verify
 du -hs target/image
+...
+51M	target/image
 ```
 
-The application can then be launch without a JRE installed.
+The application can then be launched without a JRE installed.
 
 ```bash
 ❯ ./target/image/bin/myapp
@@ -159,25 +159,108 @@ déc. 03, 2022 12:15:25 AM fr.univtln.bruno.demos.App main
 INFO: Hello World! []
 ```
 
+### Building with Maven in docker
+It is possible to build and run the project with just docker installed. 
+A wrapper to run maven and java
+in a container but to work with the current directory is proposed.
+~/.m2, ~/.ssh, ~/.gitconfig and the src directories are mounted. 
+The environment variables needed for the project are also transmitted. 
+The UID and GID are the one of the current user.    
+
+```bash
+. ./wrappers.sh
+docker-mvn clean -P shadedjar package
+docker run --rm \
+  --mount type=bind,source="$(PWD)"/target/,target=/app,readonly \
+  eclipse-temurin:17-jre-alpine \
+    sh -c "java -jar /app/*-withdependencies.jar"
+```
+
 ### Docker Multistage build
 
-With a JRE full image and the shaded Jar.
+The file `docker\Dockerfile` is a multistage Dockerfile to build and deliver 
+the application with several strategies (shaded jar, jlink, GraalVM) 
+on several distributions (debian and alpine). 
+To ease the use a wrapper for docker commands is provided in dockerw.sh
 
 ```bash
-./docker-utils/docker_compose.sh -f docker-files/docker-compose.yml build shaded
-docker run --rm brunoe/fullgit:master
+. ./wrappers.sh
+docker-wrapper-build
+docker-wrapper-run
 ```
 
-```bash
-./docker-utils/docker_compose.sh -f docker-files/docker-compose.yml build jlink
-```
+It is also possible to build all final target (Warning graalvm takes a long time to 
+compile).
 
 ```bash
-./docker-utils/docker_compose.sh -f docker-files/docker-compose.yml build graalvm
+docker-wrapper-build-all
 ```
+
+the result show the images and their size.
+
+```
+ebpro/testci   develop-finalShadedjarDebian   af3e072b35f7   2 hours ago   266MB
+ebpro/testci   develop-finalShadedjarAlpine   38973a2aa588   2 hours ago   170MB
+ebpro/testci   develop-finaljLinkDebian       db847ca5b281   2 hours ago   133MB
+ebpro/testci   develop-finalJLinkAlpine       0cba42a81a33   2 hours ago   58.2MB
+ebpro/testci   develop-finalGraalvmDebian     f5607a1e055f   2 hours ago   93.7MB
+ebpro/testci   develop-finalGraalvmAlpine     d9c0573e4750   2 hours ago   18.8MB
+```
+
+It is also possible to run all the images :
+
+```bash
+docker-wrapper-run-all
+```
+
+```log
+INFO: Hello World! []
+  0,06s user 0,04s system 6% cpu 1,529 total
+Running ebpro/testci:develop-finalShadedjarAlpine
+Dec 05, 2022 4:37:06 PM fr.univtln.bruno.demos.App main
+INFO: Hello World! []
+  0,05s user 0,05s system 5% cpu 1,724 total
+Running ebpro/testci:develop-finaljLinkDebian
+Dec 05, 2022 4:37:07 PM fr.univtln.bruno.demos.App main
+INFO: Hello World! []
+  0,05s user 0,05s system 5% cpu 1,690 total
+Running ebpro/testci:develop-finalJLinkAlpine
+Dec 05, 2022 4:37:09 PM fr.univtln.bruno.demos.App main
+INFO: Hello World! []
+  0,04s user 0,05s system 5% cpu 1,723 total
+Running ebpro/testci:develop-finalGraalvmDebian
+Dec 05, 2022 4:37:10 PM fr.univtln.bruno.demos.App main
+INFO: Hello World! []
+  0,05s user 0,03s system 7% cpu 1,161 total
+Running ebpro/testci:develop-finalGraalvmAlpine
+Dec 05, 2022 4:37:12 PM fr.univtln.bruno.demos.App main
+INFO: Hello World! []
+```
+
+
 
 ### Quality
 
-Java code coverage
+If a sonarqube server is available (i.e with https://github.com/ebpro/sonarqube).
+Set the variable SONAR_URL and SONAR_TOKEN
 
-SonarQube
+```bash
+mvn -P jacoco,sonar \
+  -Dsonar.branch.name=$(git rev-parse --abbrev-ref HEAD | tr / _) \
+  verify sonar:sonar 
+```
+
+#TODO: FIX LOST CODE COVERAGE 
+```bash
+mvn clean verify
+mvn -DskipTests=true \
+    -Dsonar.branch.name=$(git rev-parse --abbrev-ref HEAD | tr / _) \
+    -P jacoco,sonar \
+    sonar:sonar
+```
+
+### Web site
+
+```bash
+mvn site:site
+```

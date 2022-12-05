@@ -51,7 +51,7 @@ under the License.
 
     <requiredProperties>
         <requiredProperty key="githubAccount">
-            <defaultValue>emmanuelbruno</defaultValue>
+            <defaultValue>ebpro</defaultValue>
         </requiredProperty>
     </requiredProperties>
 
@@ -71,16 +71,34 @@ under the License.
                 <include>module-info.java</include>
             </includes>
         </fileSet>
+        <fileSet filtered="true">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
         <fileSet filtered="true" packaged="true">
             <directory>src/test/java</directory>
             <includes>
                 <include>**/*.java</include>
             </includes>
         </fileSet>
+        <fileSet filtered="true">
+            <directory>src/test/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
         <fileSet filtered="true" packaged="true">
             <directory>src/test-integration/java</directory>
             <includes>
                 <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true">
+            <directory>src/test-integration/resources</directory>
+            <includes>
+                <include>**/*</include>
             </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
@@ -92,9 +110,11 @@ under the License.
         <fileSet encoding="UTF-8">
             <directory />
             <includes>
-                <include>rules.xml</include>
-                <include>.gitignore</include>
                 <include>.dockerignore</include>
+                <include>.gitignore</include>
+                <include>wrappers.sh</include>
+                <include>mvnw.sh</include>
+                <include>rules.xml</include>
                 <include>README.md</include>
             </includes>
         </fileSet>
@@ -105,19 +125,7 @@ under the License.
             </includes>
         </fileSet>
         <fileSet encoding="UTF-8">
-            <directory>docker-files</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-            <directory>docker-utils</directory>
-            <includes>
-                <include>**/*</include>
-            </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-            <directory>docker-wrappers</directory>
+            <directory>docker</directory>
             <includes>
                 <include>**/*</include>
             </includes>

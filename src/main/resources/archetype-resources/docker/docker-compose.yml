@@ -1,0 +1,14 @@
+services:
+  myapp:
+    image: ${DOCKER_REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
+    build:
+      context: ..
+      dockerfile: /Dockerfile
+      args:
+        - DOCKER_USERNAME=${DOCKER_USERNAME}
+        - DOCKER_TOKEN=${DOCKER_TOKEN}
+        - SONAR_URL=${SONAR_URL}
+        - SONAR_TOKEN=${SONAR_TOKEN}
+        - GITHUB_LOGIN=${GITHUB_LOGIN}
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+        - IMAGE_NAME=${IMAGE_NAME}

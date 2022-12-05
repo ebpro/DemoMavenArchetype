@@ -25,4 +25,4 @@ jobs:
         with:
           maven-version: 3.8.6
       - name: Build with Maven
-        run: mvn -B --file pom.xml --settings docker-files/ci-settings.xml verify
+        run: mvn -B --file pom.xml --settings docker/ci-settings.xml verify

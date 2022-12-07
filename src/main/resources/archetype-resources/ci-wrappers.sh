@@ -194,11 +194,12 @@ new-java-project() (
     git add . &&
     git commit -m "sets initial empty site." &&
     git checkout develop &&
-    gh repo view --web &&
     printf "${_B_TITLE}  Generate a default deploy key${_E_TITLE}\n" &&
     _generate_and_install_new_deploy_key ${GITHUBORG} ${1} &&
     printf "${_B_TITLE}  Push initial branches${_E_TITLE}\n" &&
-    git push --all &&
+    git push --set-upstream origin gh-pages &&
+    git push --set-upstream origin develop &&
+    gh repo view --web
 )
 
 _generate_and_install_new_deploy_key() (

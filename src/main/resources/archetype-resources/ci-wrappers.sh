@@ -188,16 +188,17 @@ new-java-project() (
     printf "${_B_TITLE}  Gitflow init${_E_TITLE}\n" &&
   git flow init -d && touch README.md && git add . && git commit -m "sets initial release." &&
     printf "${_B_TITLE}  GitHub reposirory creation${_E_TITLE}\n" &&
-  gh repo create ${GITHUBORG}/${PWD##*/} --disable-wiki --public --source=. --push &&
+  gh repo create ${GITHUBORG}/${PWD##*/} --disable-wiki --public --source=. &&
     git checkout --orphan gh-pages &&
     git rm -rf . && touch index.html &&
     git add . &&
     git commit -m "sets initial empty site." &&
-    git push --all &&
     git checkout develop &&
     gh repo view --web &&
     printf "${_B_TITLE}  Generate a default deploy key${_E_TITLE}\n" &&
-    _generate_and_install_new_deploy_key
+    _generate_and_install_new_deploy_key &&
+    printf "${_B_TITLE}  Push initial branches${_E_TITLE}\n" &&
+    git push --all &&
 )
 
 _generate_and_install_new_deploy_key() (

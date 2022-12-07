@@ -186,19 +186,18 @@ new-java-project() (
     -Dversion=1.0-SNAPSHOT &&
     cd ${1} &&
     printf "${_B_TITLE}  Gitflow init${_E_TITLE}\n" &&
-  git flow init -d && touch README.md && git add . && git commit -m "sets initial release." &&
-    printf "${_B_TITLE}  GitHub reposirory creation${_E_TITLE}\n" &&
-  gh repo create ${GITHUBORG}/${PWD##*/} --disable-wiki --public --source=. &&
+    git flow init -d && git add . && git commit -m "sets initial release." &&
+    printf "${_B_TITLE}  gh-pages branch creation${_E_TITLE}\n" &&
     git checkout --orphan gh-pages &&
     git rm -rf . && touch index.html &&
     git add . &&
     git commit -m "sets initial empty site." &&
     git checkout develop &&
+    printf "${_B_TITLE}  GitHub reposirory creation${_E_TITLE}\n" &&
+    gh repo create ${GITHUBORG}/${PWD##*/} --disable-wiki --private --source=. &&
     printf "${_B_TITLE}  Generate a default deploy key${_E_TITLE}\n" &&
     _generate_and_install_new_deploy_key ${GITHUBORG} ${1} &&
-    printf "${_B_TITLE}  Push initial branches${_E_TITLE}\n" &&
-    git push --set-upstream origin develop &&
-    git push --set-upstream origin gh-pages &&
+    git push origin --mirror &&
     gh repo view --web
 )
 
@@ -206,6 +205,6 @@ _generate_and_install_new_deploy_key() (
   tmpKeydir=$(mktemp --directory /tmp/ci-wrappers.XXXXXX)
   ssh-keygen -q -t ed25519 -C "git@github.com:${1}/${2}.git" -N "" -f ${tmpKeydir}/key
   gh repo deploy-key add --allow-write "${tmpKeydir}/key.pub"
-  gh secret set SECRET_DEPLOY_KEY < "${tmpKeydir}/key"
+  gh secret set DEPLOY_KEY < "${tmpKeydir}/key"
   rm -rf tmpKeydir
 )

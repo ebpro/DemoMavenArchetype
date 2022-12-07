@@ -197,8 +197,8 @@ new-java-project() (
     printf "${_B_TITLE}  Generate a default deploy key${_E_TITLE}\n" &&
     _generate_and_install_new_deploy_key ${GITHUBORG} ${1} &&
     printf "${_B_TITLE}  Push initial branches${_E_TITLE}\n" &&
-    git push --set-upstream origin gh-pages &&
     git push --set-upstream origin develop &&
+    git push --set-upstream origin gh-pages &&
     gh repo view --web
 )
 

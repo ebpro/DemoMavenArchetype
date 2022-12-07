@@ -65,7 +65,7 @@ jobs:
       - name: Install SSH Key
         uses: webfactory/ssh-agent@v0.7.0
         with:
-          ssh-private-key: ${{ secrets.SECRET_DEPLOY_KEY }}
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
       # Build and deploy project site
       - name: Build and deploy site with Maven
         if: ${{github.ref == 'refs/heads/develop'}}

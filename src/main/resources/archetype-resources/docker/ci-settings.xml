@@ -32,13 +32,13 @@
     <servers>
         <server>
             <id>github</id>
-            <username>${env.GITHUBLOGIN}</username>
-            <password>${env.GITHUBTOKEN}</password>
+            <username>${env.GITHUB_LOGIN}</username>
+            <password>${env.GITHUB_TOKEN}</password>
         </server>
         <server>
             <id>dockerhub</id>
             <username>${env.DOCKER_USERNAME}</username>
-            <password>${env.DOCKER_TOKEN}</password>
+            <password>${env.DOCKER_PASSWORD}</password>
         </server>
         <server>
             <id>github.pages</id>

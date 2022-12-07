@@ -3,8 +3,8 @@ name: Java CI
 on: [ push ]
 
 env:
-  GITHUB_LOGIN: ${{secrets.GITHUB_LOGIN}}
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
+  GITHUBTOKEN: ${{secrets.GITHUBTOKEN}}
   SONAR_URL: ${{secrets.SONAR_URL}}
   SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
   DOCKER_LOGIN: ${{secrets.DOCKER_LOGIN}}
@@ -17,7 +17,14 @@ jobs:
     runs-on: [ self-hosted, Linux ]
     steps:
       # Environment setup
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2.4.0
+        with:
+          key: ${{ secrets.SECRET_DEPLOY_KEY }}
+      #    known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -28,28 +35,35 @@ jobs:
         uses: stCarolas/setup-maven@v4.5
         with:
           maven-version: 3.8.6
+      - name: Extract branch name
+        shell: bash
+        run: echo "MY_BRANCH=$(git rev-parse --abbrev-ref HEAD | tr / _)" >> $GITHUB_ENV
       # Build and test
       - name: Build and Test with Maven
         run: >
           mvn --batch-mode \
               --update-snapshots \
               --color always \
-              --file pom.xml \
               --settings docker/ci-settings.xml \
               -P jacoco \
               verify
       # Check quality with SonarQube
+        ### THIS STEP MUST BE ENABLED BY CONFIGURING : SONAR_URL and SONAR_TOKEN secrets.
       - name: Quality check with Sonarqube
-        ### THIS STEP MUST BE MANUALLY ENABLE AFTER CONFIGURING : SONAR_URL and SONAR_TOKEN secrets.
-        if: ${{ false }}
+        shell: bash
+        if: env.SONAR_URL != null && env.SONAR_TOKEN != null
         run: >
           mvn -DskipTests=true \
-            -Dsonar.branch.name=$(git rev-parse --abbrev-ref HEAD | tr / _) \
-            -Pjacoco,sonar \
+            --batch-mode \
+            --color always \
+            --settings docker/ci-settings.xml \
+            -Dsonar.branch.name=$MY_BRANCH \
+            -P jacoco,sonar \
             sonar:sonar
       # Stage artifact
       - run: mkdir staging && cp target/*.jar staging
-      - uses: actions/upload-artifact@v2
+      - name: Stage artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: Package
           path: staging
@@ -59,6 +73,5 @@ jobs:
         run: >
           mvn --batch-mode \
               --color always \
-              --file pom.xml \
               --settings docker/ci-settings.xml \
               site:site site-deploy

@@ -28,7 +28,7 @@
 
 # This utility function computes the image name and tag from the project directory and the git branch.
 _docker_env() {
-  DOCKER_REPO_NAME=${GITHUB_ORG}
+  DOCKER_REPO_NAME=${GITHUBORG}
   IMAGE_NAME=$(echo ${PWD##*/} | tr '[:upper:]' '[:lower:]')
   IMAGE_TAG=$(git rev-parse --abbrev-ref HEAD)
   DOCKER_TARGET=${DOCKER_TARGET:-finalJLinkAlpine}
@@ -54,8 +54,8 @@ docker-wrapper() (
     --build-arg DOCKER_PASSWORD="$DOCKER_PASSWORD" \
     --build-arg SONAR_TOKEN="$SONAR_TOKEN" \
     --build-arg SONAR_URL="$SONAR_URL" \
-    --build-arg GITHUB_LOGIN="$GITHUB_LOGIN" \
-    --build-arg GITHUB_TOKEN="$GITHUB_TOKEN" \
+    --build-arg GITHUBLOGIN="$GITHUBLOGIN" \
+    --build-arg GITHUBTOKEN="$GITHUBTOKEN" \
     --target "${DOCKER_TARGET}" \
     -t "${DOCKER_FULL_IMAGE_NAME}" \
     "${@: -1}"
@@ -99,8 +99,8 @@ docker-mvn() (
   _docker_env
   docker run \
     --env IMAGE_NAME="$IMAGE_NAME" \
-    --env GITHUB_LOGIN="$GITHUB_LOGIN" \
-    --env GITHUB_TOKEN="$GITHUB_TOKEN" \
+    --env GITHUBLOGIN="$GITHUBLOGIN" \
+    --env GITHUBTOKEN="$GITHUBTOKEN" \
     --env SONAR_URL="$SONAR_URL" \
     --env SONAR_TOKEN="$SONAR_TOKEN" \
     --env SONAR_URL="$SONAR_URL" \
@@ -140,7 +140,7 @@ new-java-project() (
     -Dversion=1.0-SNAPSHOT &&\
  cd ${1:-testci} &&\
  git flow init -d && touch README.md && git add . && git commit -m "sets initial release." &&\
-  gh repo create ${GITHUB_ORG}/${PWD##*/} --disable-wiki --public  --source=. --push &&\
+  gh repo create ${GITHUBORG}/${PWD##*/} --disable-wiki --public  --source=. --push &&\
     git checkout --orphan gh-pages && \
       git rm -rf . && touch index.html &&  \
       git add . && \

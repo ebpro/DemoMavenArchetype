@@ -9,22 +9,31 @@ and container images. The build itself can also be done in a container.
 
 ## Configuration (Once)
 The configuration is done with environment variables.
-For GitHub : GITHUB_ORG (GitHub account or organisation), GITHUB_LOGIN, GITHUB_TOKEN 
+For GitHub : GITHUBORG (GitHub account or organisation), GITHUBLOGIN, GITHUBTOKEN 
 and optionally for SonarQube SONAR_URL and SONAR_TOKEN (To install SonarQube see https://github.com/ebpro/sonarqube)
+
+For GitHub the CLI is needed (https://cli.github.com/).
 
 Those variables have to be stored on the CI server (see [GitHub Encrypted secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)).
 The script below transforms the local variables in GitHub secrets.
 
 ```bash
-bash -c 'for secret in GITHUB_LOGIN GITHUB_TOKEN SONAR_URL SONAR_TOKEN; do \
+bash -c 'for secret in GITHUBLOGIN GITHUBTOKEN SONAR_URL SONAR_TOKEN; do \
 eval gh secret set $secret --app actions  \
                            --body ${!secret} \
-                           --org ${GITHUB_ORG} \
+                           --org ${GITHUBORG} \
                            --visibility all; \
 done'
 ```
 
+
+
 ## Each new project
+
+> **NOTE**: Short version, a wrapper script is provided (READ BEFORE USE).
+> ```bash
+> source <(curl -s https://raw.githubusercontent.com/ebpro/demomavenarchetype/develop/src/main/resources/archetype-resources/wrappers.sh)
+> ```
 
 ### Creation 
 
@@ -41,6 +50,14 @@ mvn --batch-mode archetype:generate \
     -Dversion=<b>1.0-SNAPSHOT</b>
 </pre>
 
+To enable deployment in the repo during the CI a deployement key is needed for each repository.
+
+```bash
+ssh-keygen -t ed25519 -C "my description" -N "" -f ~/.ssh/gh-test
+gh repo deploy-key add ~/.ssh/gh-test.pub
+```
+
+
 ### GitFlow
 
 1. Initialize git environment for GitFlow (develop and master branches).
@@ -51,7 +68,7 @@ mvn --batch-mode archetype:generate \
 
 ```bash
 git flow init -d && touch README.md && git add . && git commit -m "sets initial release." &&\
-  gh repo create ${GITHUB_ORG}/${PWD##*/} --disable-wiki --public  --source=. --push &&\
+  gh repo create ${GITHUBORG}/${PWD##*/} --disable-wiki --public  --source=. --push &&\
     git checkout --orphan gh-pages && \
       git rm -rf . && touch index.html &&  \
       git add . && \

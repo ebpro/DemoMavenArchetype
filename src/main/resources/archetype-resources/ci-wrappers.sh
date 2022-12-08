@@ -3,8 +3,18 @@
 _B_TITLE='\033[0;33m'
 _E_TITLE='\033[0;0m'
 
+VAGRANT_VERSION=2.3.3
+TERRAFORM_VERSION=1.3.6
+DOCKER_CLIENT_VERSION=20.10.19
+DOCKER_COMPOSE_VERSION=2.13.0
+
+MAVEN_DEFAULT_IMAGE="brunoe/maven:3.8.6-eclipse-temurin-17"
+JAVA_DEFAULT_ARCHETYPE_GROUPID="fr.univtln.bruno.demos.archetypes"
+JAVA_DEFAULT_ARCHETYPE_ARTIFACTID="demomavenarchetype"
+JAVA_DEFAULT_ARCHETYPE_VERSION="1.1-SNAPSHOT"
+
 ci-wrappers-usage() {
-  echo "install-dockerclient-vagrant\n\t installs a docker client and vagant in ~/bin"
+  echo "install-dockerclient-vagrant-terraform\n\t installs a docker client, vagant and terraform in ${HOME}/bin"
   echo "new-java-project [projectname]\n\t create a new java+maven project ready for CI"
   echo "docker-wrapper"
   echo "docker-wrapper-build"
@@ -14,16 +24,41 @@ ci-wrappers-usage() {
   echo "docker-sonar-analysis"
 }
 
-install-dockerclient-vagrant() {
-  mkdir -p ~/bin &&
-    if [ -f ~/bin/vagrant ]; then
-      export PATH=~/bin:$PATH &&
-        wget -qO- https://releases.hashicorp.com/vagrant/2.3.3/vagrant_2.3.3_linux_amd64.zip | gunzip - \
-          >~/bin/vagrant &&
-        chmod +x ~/bin/vagrant
+install-dockerclient-vagrant-terraform() {
+  mkdir -p ${HOME}/bin &&
+    dockerCurrentVersion=$(docker --version|cut -d  " " -f 3|tr -d ',')
+    if [ -f ${HOME}/bin/docker ]; then
+      curl -sL https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_CLIENT_VERSION}.tgz |
+        tar --directory=${HOME}/bin/ --strip-components=1 -zx docker/docker &&
+        chmod +x ${HOME}/bin/docker
     else
-      echo "vagrant already installed"
+      echo "docker client already installed"
     fi
+  if [ -f ${HOME}/.docker/cli-plugins/docker-compose ]; then
+    mkdir -p ${HOME}/.docker/cli-plugins/ &&
+      curl -SL https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64 -o ${HOME}/.docker/cli-plugins/docker-compose &&
+      chmod +x ${HOME}/.docker/cli-plugins/docker-compose
+  else
+    echo "docker compose already installed"
+  fi
+
+  if [ -f ${HOME}/bin/vagrant ]; then
+    export PATH=${HOME}/bin:$PATH &&
+      wget -qO- https://releases.hashicorp.com/vagrant/${vagrant_VAGRANT_VERSION}/${vagrant_VAGRANT_VERSION}_linux_amd64.zip | gunzip - \
+        >${HOME}/bin/vagrant &&
+      chmod +x ${HOME}/bin/vagrant
+  else
+    echo "vagrant already installed"
+  fi
+  if [ -f ${HOME}/bin/terraform ]; then
+    export PATH=${HOME}/bin:$PATH &&
+      wget -qO- https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip | gunzip - \
+        >${HOME}/bin/terraform &&
+      chmod +x ${HOME}/bin/terraform
+  else
+    echo "terraform already installed"
+  fi
+
 }
 
 provision-docker-engine() {
@@ -144,16 +179,16 @@ docker-mvn() (
     --env SONAR_TOKEN="$SONAR_TOKEN" \
     --env S6_LOGGING=1 \
     --env S6_BEHAVIOUR_IF_STAGE2_FAILS \
-    --volume ~/.m2:/home/user/.m2 \
-    --volume ~/.ssh:/home/user/.ssh \
-    --volume ~/.gitconfig:/home/user/.gitconfig \
+    --volume ${HOME}/.m2:/home/user/.m2 \
+    --volume ${HOME}/.ssh:/home/user/.ssh \
+    --volume ${HOME}/.gitconfig:/home/user/.gitconfig \
     --volume "$
     }(pwd)":/usr/src/mymaven \
     --workdir /usr/src/mymaven \
     --rm \
     --env PUID=$(id -u) -e PGID=$(id -g) \
     --env MAVEN_CONFIG=/home/user/.m2 \
-    "${MAVEN_IMAGE:-brunoe/maven:3.8.6-eclipse-temurin-17}" \
+    "${MAVEN_IMAGE:-${MAVEN_DEFAULT_IMAGE}}" \
     runuser --user user \
     --group user \
     -- mvn --errors --threads 1C --color always --strict-checksums \
@@ -177,9 +212,9 @@ new-java-project() (
   printf "${_B_TITLE}$1 with groupId $2${_E_TITLE}\n"
   printf "${_B_TITLE}  calling maven archetype${_E_TITLE}\n"
   mvn --quiet --color=always --batch-mode archetype:generate \
-    -DarchetypeGroupId=fr.univtln.bruno.demos.archetypes \
-    -DarchetypeArtifactId=demomavenarchetype \
-    -DarchetypeVersion=1.1-SNAPSHOT \
+    -DarchetypeGroupId=${JAVA_DEFAULT_ARCHETYPE_GROUPID} \
+    -DarchetypeArtifactId=${JAVA_DEFAULT_ARCHETYPE_ARTIFACTID} \
+    -DarchetypeVersion=${JAVA_DEFAULT_ARCHETYPE_VERSION} \
     -DgithubAccount=${GITHUBORG} \
     -DgroupId=${2} \
     -DartifactId=${1} \
@@ -205,6 +240,6 @@ _generate_and_install_new_deploy_key() (
   tmpKeydir=$(mktemp --directory /tmp/ci-wrappers.XXXXXX)
   ssh-keygen -q -t ed25519 -C "git@github.com:${1}/${2}.git" -N "" -f ${tmpKeydir}/key
   gh repo deploy-key add --allow-write "${tmpKeydir}/key.pub"
-  gh secret set DEPLOY_KEY < "${tmpKeydir}/key"
+  gh secret set SSH_PRIVATE_KEY <"${tmpKeydir}/key"
   rm -rf tmpKeydir
 )

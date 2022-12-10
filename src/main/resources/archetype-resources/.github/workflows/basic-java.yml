@@ -4,7 +4,7 @@ on: [ push ]
 
 env:
   GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
-  GITHUBTOKEN: ${{secrets.GITHUBTOKEN}}
+  GITHUBTOKEN: ${{secrets.GITHUB_TOKEN}}
   SONAR_URL: ${{secrets.SONAR_URL}}
   SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
   DOCKER_LOGIN: ${{secrets.DOCKER_LOGIN}}
@@ -16,6 +16,7 @@ jobs:
     # The tags to select the runner
     runs-on: [ self-hosted, Linux ]
     steps:
+
       # Environment setup
       - uses: actions/checkout@v3
         with:
@@ -30,9 +31,11 @@ jobs:
         uses: stCarolas/setup-maven@v4.5
         with:
           maven-version: 3.8.6
+
       - name: Extract branch name
         shell: bash
         run: echo "MY_BRANCH=$(git rev-parse --abbrev-ref HEAD | tr / _)" >> $GITHUB_ENV
+
       # Build and test
       - name: Build and Test with Maven
         run: >
@@ -42,6 +45,7 @@ jobs:
               --settings docker/ci-settings.xml \
               -P jacoco \
               verify
+
       # Check quality with SonarQube
         ### THIS STEP MUST BE ENABLED BY CONFIGURING : SONAR_URL and SONAR_TOKEN secrets.
       - name: Quality check with Sonarqube
@@ -55,6 +59,7 @@ jobs:
             -Dsonar.branch.name=$MY_BRANCH \
             -P jacoco,sonar \
             sonar:sonar
+
       # Stage artifact
       - run: mkdir staging && cp target/*.jar staging
       - name: Stage artifacts

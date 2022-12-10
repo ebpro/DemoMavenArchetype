@@ -3,12 +3,12 @@ name: Java CI
 on: [ push ]
 
 env:
-  GITHUBLOGIN: ${{secrets.GITHUBLOGIN}}
-  GITHUBTOKEN: ${{secrets.GITHUB_TOKEN}}
-  SONAR_URL: ${{secrets.SONAR_URL}}
-  SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
-  DOCKER_LOGIN: ${{secrets.DOCKER_LOGIN}}
-  DOCKER_TOKEN: ${{secrets.DOCKER_TOKEN}}
+  GITHUBLOGIN: ${{ secrets.GITHUBLOGIN }}
+  GITHUBTOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SONAR_URL: ${{ secrets.SONAR_URL }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
 
 jobs:
   # This job build, test and stage the artefact and the website for the develop branch

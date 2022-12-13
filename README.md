@@ -18,7 +18,7 @@ Those variables have to be stored on the CI server (see [GitHub Encrypted secret
 The script below transforms the local variables in GitHub secrets.
 
 ```bash
-bash -c 'for secret in GITHUBLOGIN GITHUBTOKEN SONAR_URL SONAR_TOKEN; do \
+bash -c 'for secret in GITHUBLOGIN GITHUBTOKEN SONAR_URL SONAR_TOKEN DOCKER_LOGIN DOCKER_PASSWORD; do \
 eval gh secret set $secret --app actions  \
                            --body ${!secret} \
                            --org ${GITHUBORG} \

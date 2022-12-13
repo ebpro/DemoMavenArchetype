@@ -4,7 +4,7 @@ on: [ push ]
 
 env:
   GITHUBLOGIN: ${{ secrets.GITHUBLOGIN }}
-  GITHUBTOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUBTOKEN: ${{ secrets.GITHUBTOKEN }}
   SONAR_URL: ${{ secrets.SONAR_URL }}
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
